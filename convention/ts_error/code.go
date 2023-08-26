@@ -1,4 +1,4 @@
-package convention
+package ts_error
 
 import "fmt"
 
