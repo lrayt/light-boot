@@ -2,7 +2,7 @@ package log_provider
 
 import (
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
-	"github.com/light-boot/core/env"
+	"github.com/lrayt/light-boot/core/env"
 	"github.com/pkg/errors"
 	"github.com/rifflock/lfshook"
 	"github.com/sirupsen/logrus"

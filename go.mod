@@ -1,4 +1,4 @@
-module github.com/light-boot
+module github.com/lrayt/light-boot
 
 go 1.19
 

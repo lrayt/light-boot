@@ -2,7 +2,7 @@ package core
 
 import (
 	"context"
-	"github.com/light-boot/core/log_provider"
+	"github.com/lrayt/light-boot/core/log_provider"
 )
 
 // GAppName 运行服务名

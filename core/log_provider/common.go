@@ -2,7 +2,7 @@ package log_provider
 
 import (
 	"context"
-	"github.com/light-boot/pkg/uuid"
+	"github.com/lrayt/light-boot/pkg/uuid"
 )
 
 const (

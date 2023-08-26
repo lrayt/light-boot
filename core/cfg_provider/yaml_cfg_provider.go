@@ -3,7 +3,7 @@ package cfg_provider
 import (
 	"errors"
 	"fmt"
-	"github.com/light-boot/core/env"
+	"github.com/lrayt/light-boot/core/env"
 	"github.com/spf13/viper"
 	"path/filepath"
 )

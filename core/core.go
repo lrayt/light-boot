@@ -2,11 +2,11 @@ package core
 
 import (
 	"errors"
-	"github.com/light-boot/core/cfg_provider"
-	"github.com/light-boot/core/env"
-	"github.com/light-boot/core/log_provider"
-	"github.com/light-boot/core/runtime"
-	"github.com/light-boot/pkg/file_utils"
+	"github.com/lrayt/light-boot/core/cfg_provider"
+	"github.com/lrayt/light-boot/core/env"
+	"github.com/lrayt/light-boot/core/log_provider"
+	"github.com/lrayt/light-boot/core/runtime"
+	"github.com/lrayt/light-boot/pkg/file_utils"
 )
 
 var appRuntime *runtime.AppRuntime
