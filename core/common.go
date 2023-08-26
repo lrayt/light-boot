@@ -2,6 +2,7 @@ package core
 
 import (
 	"context"
+	"github.com/lrayt/light-boot/core/cfg_provider"
 	"github.com/lrayt/light-boot/core/log_provider"
 )
 
@@ -17,6 +18,11 @@ func GRunEnv() string {
 // GBuildVersion 构建版本
 func GBuildVersion() string {
 	return appRuntime.Env.BuildVersion
+}
+
+// GConfigs 全局配置
+func GConfigs() cfg_provider.ConfigProvider {
+	return appRuntime.ConfigProvider
 }
 
 // NewLoggerWithCTX 日志收集器
