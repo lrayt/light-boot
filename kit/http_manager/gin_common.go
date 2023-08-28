@@ -1,4 +1,4 @@
-package gin_middleware
+package http_manager
 
 import (
 	"context"
