@@ -3,11 +3,11 @@ package test
 import (
 	"context"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"github.com/lrayt/light-boot/core"
 	"github.com/lrayt/light-boot/kit/http_manager"
 	"log"
 	"path/filepath"
+	"reflect"
 	"testing"
 )
 
@@ -31,8 +31,11 @@ func CreateUser(ctx context.Context, req *UserInfo) interface{} {
 	fmt.Println("===<<<")
 	//fmt.Printf("======>%s====>%d\n", req.Name, req.Age)
 	lg := core.NewLoggerWithCTX("CreateUser", ctx)
-	lg.Info("hello")
-	return gin.H{"code": 11100}
+	lg.Info("hello", map[string]interface{}{"req": req})
+	return &UserInfo{
+		Name: "abc",
+		Age:  22,
+	}
 }
 
 func TestGinHttpProvider(t *testing.T) {
@@ -41,4 +44,50 @@ func TestGinHttpProvider(t *testing.T) {
 	group.Post("/create", CreateUser)
 	err := p.Run()
 	t.Log(err)
+}
+
+type User struct {
+	Name string `json:"name"`
+}
+
+func NewObj(mapData map[string]interface{}, target interface{}) interface{} {
+	targetType := reflect.TypeOf(target)
+	if targetType.Kind() != reflect.Ptr || targetType.Elem().Kind() != reflect.Struct {
+		return nil
+	}
+	targetElem := targetType.Elem()
+	req := reflect.New(targetElem).Elem()
+	for i := 0; i < targetElem.NumField(); i++ {
+		field := targetElem.Field(i)
+		tag := field.Tag.Get("json")
+		fmt.Println("===>", tag)
+		if tag == "" {
+			continue
+		}
+
+		fieldValue, found := mapData[tag]
+		if !found {
+			return fmt.Errorf("missing key '%s' in map data", tag)
+		}
+
+		structField := req.Field(i)
+		if !structField.CanSet() {
+			return fmt.Errorf("cannot set value for field '%s'", field.Name)
+		}
+
+		value := reflect.ValueOf(fieldValue)
+		if value.Type().ConvertibleTo(structField.Type()) {
+			structField.Set(value.Convert(structField.Type()))
+		} else {
+			return fmt.Errorf("cannot convert value for field '%s'", field.Name)
+		}
+	}
+	return req
+}
+
+func TestReflect(t *testing.T) {
+	data := map[string]interface{}{"name": "lirui"}
+	o := NewObj(data, &User{})
+	obj, ok := o.(*User)
+	t.Log(o, obj, ok)
 }

@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/lrayt/light-boot/convention"
 	"github.com/lrayt/light-boot/core"
+	"net/http"
 	"reflect"
 	"strings"
 )
@@ -36,18 +37,88 @@ func (g GinRouterGroup) Post(route string, handler RouterHandler) {
 			return
 		}
 		// check handler last param
-		if handlerType.In(1).Kind() != reflect.Ptr {
+		targetType := handlerType.In(1)
+		if targetType.Kind() != reflect.Ptr || targetType.Elem().Kind() != reflect.Struct {
 			return
 		}
-		// fill req
-		// req
-		req := reflect.New(handlerType.In(1)).Elem()
-		if err := c.Bind(req); err != nil {
+		//targetElem := targetType.Elem()
+		//req := reflect.New(targetElem).Elem()
+		//for i := 0; i < targetElem.NumField(); i++ {
+		//	field := targetElem.Field(i)
+		//	tag := field.Tag.Get("json")
+		//	if tag == "" {
+		//		continue
+		//	}
+		//	c.ShouldBindBodyWith()
+		//
+		//	fieldValue, found := mapData[tag]
+		//	if !found {
+		//		return fmt.Errorf("missing key '%s' in map data", tag)
+		//	}
+		//
+		//	structField := req.Field(i)
+		//	if !structField.CanSet() {
+		//		return fmt.Errorf("cannot set value for field '%s'", field.Name)
+		//	}
+		//
+		//	value := reflect.ValueOf(fieldValue)
+		//	if value.Type().ConvertibleTo(structField.Type()) {
+		//		structField.Set(value.Convert(structField.Type()))
+		//	} else {
+		//		return fmt.Errorf("cannot convert value for field '%s'", field.Name)
+		//	}
+		//}
+		//
+		//req := reflect.New(handlerType.In(1).Elem())
+		//for i := 0; i < req.NumField(); i++ {
+		//	req.Field(i).SetString("lirui")
+		//}
+
+		//targetElem := handlerType.In(1).Elem()
+		////targetType := targetElem.NumField()
+		//
+		//for i := 0; i < targetElem.NumField(); i++ {
+		//	field := targetElem.Field(i)
+		//	tag := field.Tag.Get("json")
+		//
+		//	fmt.Println("======<", tag)
+		//	//if tag == "" {
+		//	//	continue
+		//	//}
+		//	//
+		//	//fieldValue, found := mapData[tag]
+		//	//if !found {
+		//	//	return fmt.Errorf("missing key '%s' in map data", tag)
+		//	//}
+		//	//
+		//	//structField := targetElem.Field(i)
+		//	//if !structField.CanSet() {
+		//	//	return fmt.Errorf("cannot set value for field '%s'", field.Name)
+		//	//}
+		//	//
+		//	//value := reflect.ValueOf(fieldValue)
+		//	//if value.Type().ConvertibleTo(structField.Type()) {
+		//	//	structField.Set(value.Convert(structField.Type()))
+		//	//} else {
+		//	//	return fmt.Errorf("cannot convert value for field '%s'", field.Name)
+		//	//}
+		//}
+		//
+		//fmt.Println("===>", handlerType.In(1).Elem().Kind())
+		//
+		//// fill req
+		//// req
+		req := reflect.New(targetType.Elem())
+		if err := c.Bind(&req); err != nil {
+			fmt.Println("---->", err)
 			return
 		}
+		fmt.Println("req:", req)
 		handlerValue := reflect.ValueOf(handler)
 		args := []reflect.Value{reflect.ValueOf(ToCTX(c)), req}
-		handlerValue.Call(args)
+		result := handlerValue.Call(args)
+		fmt.Println("---<", len(result))
+		c.JSON(http.StatusOK, &result[0])
 	})
 }
 
