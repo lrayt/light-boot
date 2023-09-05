@@ -25,6 +25,10 @@ func GConfigs() cfg_provider.ConfigProvider {
 	return appRuntime.ConfigProvider
 }
 
+func GWorkDir() string {
+	return appRuntime.Env.WorkDir
+}
+
 // NewLoggerWithCTX 日志收集器
 func NewLoggerWithCTX(module string, args ...context.Context) log_provider.Logger {
 	commonFields := map[string]interface{}{
