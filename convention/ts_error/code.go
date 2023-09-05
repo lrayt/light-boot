@@ -1,7 +1,5 @@
 package ts_error
 
-import "fmt"
-
 // 统一错误码
 const (
 	Success      = 0
@@ -19,12 +17,7 @@ const (
 )
 
 type BaseResponse struct {
-	Code int32  `json:"code"`
-	Msg  string `json:"msg"`
-}
-
-var BindErr = &BaseResponse{Code: ParamInvalid, Msg: "无效的参数"}
-
-var EmptyParamErr = func(paramName string) *BaseResponse {
-	return &BaseResponse{Code: ParamIsEmpty, Msg: fmt.Sprintf("参数[%s]不能为空", paramName)}
+	Code int32       `json:"code"`
+	Msg  string      `json:"msg"`
+	Data interface{} `json:"data"`
 }
