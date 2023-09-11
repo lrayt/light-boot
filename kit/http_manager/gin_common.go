@@ -63,3 +63,12 @@ func GetHttpConf() (*convention.HttpConf, error) {
 	var err = core.GConfigs().PackConf("http", httpConf)
 	return httpConf, err
 }
+
+func GetUserId(ctx context.Context) string {
+	uid := ctx.Value(log_provider.UserId)
+	if str, ok := uid.(string); ok {
+		return str
+	} else {
+		return "none"
+	}
+}
