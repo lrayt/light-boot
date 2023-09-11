@@ -2,6 +2,7 @@ package http_manager
 
 import (
 	"context"
+	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/lrayt/light-boot/convention"
 	"github.com/lrayt/light-boot/core"
@@ -64,11 +65,11 @@ func GetHttpConf() (*convention.HttpConf, error) {
 	return httpConf, err
 }
 
-func GetUserId(ctx context.Context) string {
+func GetUserId(ctx context.Context) (string, error) {
 	uid := ctx.Value(log_provider.UserId)
-	if str, ok := uid.(string); ok {
-		return str
+	if str, ok := uid.(string); ok && len(str) > 0 {
+		return str, nil
 	} else {
-		return "none"
+		return "", errors.New("找不到UID")
 	}
 }
