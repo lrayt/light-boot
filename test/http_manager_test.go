@@ -17,7 +17,7 @@ func init() {
 		log.Fatalf("获取项目工作路径失败,%s\n", pathErr.Error())
 	}
 
-	if err := core.InitApp("light-boot", rootPath, "0.1.5"); err != nil {
+	if err := core.InitEnv("light-boot", rootPath, "0.1.5"); err != nil {
 		log.Fatalf("init app err:%s\n", err.Error())
 	}
 }

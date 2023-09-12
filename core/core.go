@@ -11,8 +11,8 @@ import (
 
 var appRuntime *runtime.AppRuntime
 
-// InitApp 初始化应用
-func InitApp(appName, workDir string, args ...string) error {
+// InitEnv 初始化环境
+func InitEnv(appName, workDir string, args ...string) error {
 	var globalEnv = new(env.GlobalEnv)
 	// init envName
 	if len(appName) <= 0 {
