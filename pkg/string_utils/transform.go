@@ -14,3 +14,13 @@ func Str2Byte(s string) []byte {
 		}{s, len(s)},
 	))
 }
+
+func Str2ByteWithPrefix(prefix, s string) []byte {
+	s = prefix + s
+	return *(*[]byte)(unsafe.Pointer(
+		&struct {
+			string
+			Cap int
+		}{s, len(s)},
+	))
+}
