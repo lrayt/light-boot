@@ -19,14 +19,14 @@ func ToCTX(c *gin.Context) context.Context {
 	// uid
 	var ctx = context.WithValue(context.Background(), log_provider.TraceId, traceId)
 	if uid, exist := c.Get(log_provider.UserId); exist {
-		context.WithValue(ctx, log_provider.UserId, uid)
+		ctx = context.WithValue(ctx, log_provider.UserId, uid)
 	}
 
 	// isAdmin
 	if isAdmin, exist := c.Get(log_provider.IsAdmin); exist {
-		context.WithValue(ctx, log_provider.IsAdmin, isAdmin)
+		ctx = context.WithValue(ctx, log_provider.IsAdmin, isAdmin)
 	} else {
-		context.WithValue(ctx, log_provider.IsAdmin, false)
+		ctx = context.WithValue(ctx, log_provider.IsAdmin, false)
 	}
 
 	return ctx
