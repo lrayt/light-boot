@@ -2,7 +2,7 @@ package ts_error
 
 // 统一错误码
 const (
-	Success      = 0
+	Success      = 10000
 	ParamInvalid = 10001 // 无效的参数
 	ParamIsEmpty = 10002
 

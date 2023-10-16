@@ -9,7 +9,7 @@ import (
 )
 
 func NewYamlConfigProvider(globalEnv *env.GlobalEnv) (*YamlConfigProvider, error) {
-	var cfgFile = filepath.Join(globalEnv.WorkDir, "configs", fmt.Sprintf("skeleton-%s-conf.yaml", globalEnv.RunEnv))
+	var cfgFile = filepath.Join(globalEnv.WorkDir, "resource", "conf", fmt.Sprintf("skeleton-%s-conf.yaml", globalEnv.RunEnv))
 	var cfgContainer = &YamlConfigProvider{medium: viper.New()}
 	cfgContainer.medium.SetConfigType("yaml")
 	cfgContainer.medium.SetConfigFile(cfgFile)
