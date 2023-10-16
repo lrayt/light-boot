@@ -10,6 +10,7 @@ const (
 	TraceId   = "trace-id"
 	BizId     = "biz-id"
 	UserId    = "user-id"
+	IsAdmin   = "is_admin"
 )
 
 func NewTraceId() string {

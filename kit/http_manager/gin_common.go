@@ -16,31 +16,21 @@ func ToCTX(c *gin.Context) context.Context {
 			traceId = tid
 		}
 	}
-	return context.WithValue(context.Background(), log_provider.TraceId, traceId)
-}
+	// uid
+	var ctx = context.WithValue(context.Background(), log_provider.TraceId, traceId)
+	if uid, exist := c.Get(log_provider.UserId); exist {
+		context.WithValue(ctx, log_provider.UserId, uid)
+	}
 
-//func CORSMiddleware() gin.HandlerFunc {
-//	return func(c *gin.Context) {
-//		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
-//		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
-//		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With, Signature, X-authorize-uuid")
-//		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT")
-//
-//		if c.Request.Method == "OPTIONS" {
-//			c.AbortWithStatus(200)
-//			return
-//		}
-//
-//		var traceId = c.GetHeader(log_provider.RequestId)
-//
-//		if len(traceId) <= 0 {
-//			traceId = log_provider.NewTraceId()
-//		}
-//		c.Set(log_provider.TraceId, traceId)
-//		c.Writer.Header().Set(log_provider.RequestId, traceId)
-//		c.Next()
-//	}
-//}
+	// isAdmin
+	if isAdmin, exist := c.Get(log_provider.IsAdmin); exist {
+		context.WithValue(ctx, log_provider.IsAdmin, isAdmin)
+	} else {
+		context.WithValue(ctx, log_provider.IsAdmin, false)
+	}
+
+	return ctx
+}
 
 // CORSMiddleware 跨域设置
 func CORSMiddleware() gin.HandlerFunc {
@@ -72,4 +62,10 @@ func GetUserId(ctx context.Context) (string, error) {
 	} else {
 		return "", errors.New("找不到UID")
 	}
+}
+
+func IsAdmin(ctx context.Context) bool {
+	isAdmin := ctx.Value(log_provider.IsAdmin)
+	is, ok := isAdmin.(bool)
+	return ok && is
 }
