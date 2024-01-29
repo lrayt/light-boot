@@ -7,6 +7,7 @@ import (
 	"github.com/lrayt/light-boot/convention"
 	"github.com/lrayt/light-boot/core"
 	"github.com/lrayt/light-boot/core/env"
+	"github.com/lrayt/light-boot/core/event_bus"
 	"log"
 	"net"
 	"net/http"
@@ -154,7 +155,7 @@ func (p GinHttpProvider) Run() error {
 	return p.Engine.Run(fmt.Sprintf("0.0.0.0:%d", cfg.Port))
 }
 
-func (p GinHttpProvider) RunWithHandler(baseUrl string, handler func(rg *gin.RouterGroup), started func()) {
+func (p GinHttpProvider) RunWithHandler(baseUrl string, handler func(rg *gin.RouterGroup)) {
 	if core.GRunEnv() == env.RunProdEnv {
 		gin.SetMode(gin.ReleaseMode)
 	}
@@ -173,13 +174,14 @@ func (p GinHttpProvider) RunWithHandler(baseUrl string, handler func(rg *gin.Rou
 	}
 	rg := p.Engine.Group(baseUrl)
 	handler(rg)
+	core.GEventBus().Emit(event_bus.EventBeforeHttpStart, nil)
 	// 检测服务是否启动
 	go func() {
 		var addr = fmt.Sprintf("127.0.0.1:%d", conf.Port)
 		for {
 			if _, err := net.DialTimeout("tcp", addr, time.Second); err == nil {
 				log.Printf("%s服务已启动，%s\n", core.GAppName(), conf.BaseUrl())
-				started()
+				core.GEventBus().Emit(event_bus.EventHttpStarted, nil)
 				break
 			}
 		}

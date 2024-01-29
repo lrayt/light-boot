@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/lrayt/light-boot/core/cfg_provider"
 	"github.com/lrayt/light-boot/core/env"
+	"github.com/lrayt/light-boot/core/event_bus"
 	"github.com/lrayt/light-boot/core/log_provider"
 	"github.com/lrayt/light-boot/core/runtime"
 	"github.com/lrayt/light-boot/pkg/file_utils"
@@ -33,7 +34,10 @@ func InitEnv(appName, workDir string, args ...string) error {
 	} else {
 		globalEnv.BuildVersion = "master"
 	}
-	appRuntime = &runtime.AppRuntime{Env: globalEnv}
+	appRuntime = &runtime.AppRuntime{
+		Env:      globalEnv,
+		EventBus: event_bus.NewEventBus(),
+	}
 	appRuntime.Print()
 	// 设置默认配置构造器
 	if provider, err := cfg_provider.NewYamlConfigProvider(globalEnv); err != nil {

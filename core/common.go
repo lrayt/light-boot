@@ -3,6 +3,7 @@ package core
 import (
 	"context"
 	"github.com/lrayt/light-boot/core/cfg_provider"
+	"github.com/lrayt/light-boot/core/event_bus"
 	"github.com/lrayt/light-boot/core/log_provider"
 )
 
@@ -27,6 +28,10 @@ func GConfigs() cfg_provider.ConfigProvider {
 
 func GWorkDir() string {
 	return appRuntime.Env.WorkDir
+}
+
+func GEventBus() *event_bus.EventBus {
+	return appRuntime.EventBus
 }
 
 // NewLoggerWithCTX 日志收集器

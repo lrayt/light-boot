@@ -10,3 +10,7 @@ type RPCConf struct {
 func (c RPCConf) Addr() string {
 	return fmt.Sprintf("%s:%d", c.Host, c.Port)
 }
+
+func (c RPCConf) BaseUrl() string {
+	return fmt.Sprintf("rpc://%s:%d", c.Host, c.Port)
+}
