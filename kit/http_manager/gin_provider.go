@@ -6,9 +6,14 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/lrayt/light-boot/convention"
 	"github.com/lrayt/light-boot/core"
+	"github.com/lrayt/light-boot/core/env"
+	"log"
+	"net"
 	"net/http"
+	"path/filepath"
 	"reflect"
 	"strings"
+	"time"
 )
 
 type GinRouterGroup struct {
@@ -147,4 +152,44 @@ func (p GinHttpProvider) Run() error {
 		return err
 	}
 	return p.Engine.Run(fmt.Sprintf("0.0.0.0:%d", cfg.Port))
+}
+
+func (p GinHttpProvider) RunWithHandler(baseUrl string, handler func(rg *gin.RouterGroup), started func()) {
+	if core.GRunEnv() == env.RunProdEnv {
+		gin.SetMode(gin.ReleaseMode)
+	}
+	// 读取配置
+	conf, confErr := GetHttpConf()
+	if confErr != nil {
+		log.Fatalf("%s服务读取配置，err:%s\n", core.GAppName(), confErr.Error())
+	}
+	// 静态文件配置
+	for _, webResource := range conf.Static {
+		p.Engine.Static(webResource.Route, filepath.Join(core.GWorkDir(), webResource.FilePath))
+	}
+	// 跨域
+	if conf.EnableCORS {
+		p.Engine.Use(CORSMiddleware())
+	}
+	rg := p.Engine.Group(baseUrl)
+	handler(rg)
+	// 检测服务是否启动
+	go func() {
+		var addr = fmt.Sprintf("127.0.0.1:%d", conf.Port)
+		for {
+			if _, err := net.DialTimeout("tcp", addr, time.Second); err == nil {
+				log.Printf("%s服务已启动，%s\n", core.GAppName(), conf.BaseUrl())
+				started()
+				break
+			}
+		}
+	}()
+	// 服务
+	srv := http.Server{
+		Handler: p.Engine,
+		Addr:    fmt.Sprintf("0.0.0.0:%v", conf.Port),
+	}
+	if err := srv.ListenAndServe(); err != nil {
+		log.Fatalf("%s服务启动失败，err:%s\n", core.GAppName(), err.Error())
+	}
 }

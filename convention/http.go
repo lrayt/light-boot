@@ -8,12 +8,13 @@ type StaticMap struct {
 }
 
 type HttpConf struct {
-	Host   string
-	Port   uint32
-	UseTLS bool
-	Pem    string
-	Key    string
-	Static []StaticMap
+	Host       string
+	Port       uint32
+	UseTLS     bool
+	Pem        string
+	Key        string
+	Static     []StaticMap
+	EnableCORS bool
 }
 
 func (c HttpConf) BaseUrl() string {
