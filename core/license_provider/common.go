@@ -26,8 +26,8 @@ func (info LicenseInfo) toMap() map[string]interface{} {
 	}
 }
 
-func (info LicenseInfo) GenSign(licenseInfo *LicenseInfo) {
-	data, _ := json.Marshal(licenseInfo.toMap())
+func (info *LicenseInfo) GenSign() {
+	data, _ := json.Marshal(info.toMap())
 	h := md5.New()
 	h.Write(data)
 	info.Sign = hex.EncodeToString(h.Sum(nil))
