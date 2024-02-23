@@ -24,3 +24,20 @@ func PortInUse(port uint32) bool {
 	//conn.Close()
 	return false
 }
+
+func GetMacAddressByNet() ([]string, error) {
+	var adapterList []string
+	netInterfaces, err := net.Interfaces()
+	if err != nil {
+		return nil, err
+	}
+
+	for _, netInterface := range netInterfaces {
+		macAddr := netInterface.HardwareAddr.String()
+		if len(macAddr) == 0 {
+			continue
+		}
+		adapterList = append(adapterList, macAddr)
+	}
+	return adapterList, nil
+}
