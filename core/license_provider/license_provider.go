@@ -8,6 +8,8 @@ import (
 	"encoding/pem"
 	"errors"
 	"fmt"
+	"github.com/lrayt/light-boot/pkg/date"
+	"github.com/lrayt/light-boot/pkg/ip"
 	"os"
 	"path/filepath"
 )
@@ -145,4 +147,48 @@ func (p LicenseProvider) DecryptLicense(privateKeyPEM string) (*LicenseInfo, err
 		return nil, err
 	}
 	return info, nil
+}
+
+func (p LicenseProvider) CheckByPrivateKey(privateKeyPEM string) error {
+	info, err1 := p.DecryptLicense(privateKeyPEM)
+	if err1 != nil {
+		return errors.New("授权证书不合法！")
+	}
+
+	var sign = info.GenSign()
+	if sign != info.Sign {
+		return errors.New("授权证书内容已被修改，证书失效！")
+	}
+
+	if !info.LicenseActivated && info.LicenseExpiresDate <= date.NowTime().Unix() {
+		return errors.New(fmt.Sprintf("授权证书超过可激活时间[%s]，证书已失效", date.FormatDate(info.LicenseExpiresDate)))
+	}
+
+	if info.ServiceExpiresDate <= date.NowTime().Unix() {
+		return errors.New(fmt.Sprintf("已超过授权截至时间[%s]，证书已失效", date.FormatDate(info.ServiceExpiresDate)))
+	}
+
+	if len(info.MacAddress) > 0 {
+		macList, err2 := ip.GetMacAddressByNet()
+		if err2 != nil || len(macList) <= 0 {
+			return errors.New(fmt.Sprintf("获取主机标识失败，err:%v", err2))
+		}
+		var isContain = false
+		for _, s := range macList {
+			for _, t := range info.MacAddress {
+				isContain = s == t
+			}
+		}
+		if !isContain {
+			return errors.New("此设备不在授权列表内！")
+		}
+	}
+
+	if !info.LicenseActivated {
+		info.LicenseActivated = true
+		if err := p.GenLicense(info); err != nil {
+			return err
+		}
+	}
+	return nil
 }

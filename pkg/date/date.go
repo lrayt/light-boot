@@ -32,6 +32,12 @@ func FormatDate(date interface{}) string {
 			return "-"
 		}
 		return date.(*time.Time).Format(TimeLayout)
+	case "int64":
+		t, ok := date.(int64)
+		if !ok || t <= 0 {
+			return "-"
+		}
+		return time.Unix(t, 0).Format(TimeLayout)
 	default:
 		return "-"
 	}

@@ -5,7 +5,7 @@ import (
 )
 
 func TestGenKey(t *testing.T) {
-	p := NewLicenseProvider("D:\\tmp")
+	p := NewLicenseProvider("D:\\workspace\\golang\\src\\git.gtmap.cn\\license")
 	//err := p.GenKey()
 	//t.Log(err)
 	//var info = &LicenseInfo{
@@ -23,8 +23,8 @@ func TestGenKey(t *testing.T) {
 	//info, err3 := p.LoadLicenseInfo()
 	//t.Log(info)
 	//t.Log(err3)
-	var privateKey = "-----BEGIN PRIVATE KEY-----\nMIIEpQIBAAKCAQEAwuEzGT1yDzijb+qg6fPnhAF1BAzxyZ68O/F9n2YF6XgYt0bT\nUFqbtOKbNVgI6F1QGpg4nYWJdapQDsavILKeNaOyc66xTBtUhdEx8liHfXN4x2pP\nh6sPqM0sPZn4i10ajfli8O4xT1wVDhJuO5Xzxzz282wD+uc0kxygKed1ZdDDyapQ\n6EbKNZAF896CXUGlq1Rrxu62xrkXshK9+xILow3Xvo5B7Vln6wr0fvJ6Awqz9gxo\n60Sj3h44a3zo1GhNM7j8Ae4JI8dCGONTKMOx9DH+kjHRAOtVjWyYraAhvZNmVG/L\nUXLe6wYF3aKNBJ3ICg9m4I61Mo2k6PZtF8qKmwIDAQABAoIBAAMp9NJsFPX6TWz7\nujESLKgP/f5a13IWiafPe+KinWX09THEjJm5Xt3I8Awlqb9cBHjqD8E+8cRfR311\n7FHzlG36gmMuauJ5bx3dD5qHpWt7/HIAX9osBM0Qx68YWNiqYkv7yIdw1owbSpw3\n4GJHRPXvH3NERaxFJK1ewZrsjxNgEQmJHvougp4OjHX3dpQ3QsFLC0Xi6cptG6EQ\nFE6ZkJwPeRQbIteuZ63E1bmo844LnA/8np9/aXgFgO1zoDBprxCkZ+hw4HgRXTfc\nIp6rhtZx1vCJ+TV04UbItvAlnbEa6BnGViwgUr3OEWsJPdblMFu3Jxjdx7cWhY6T\nESshvAECgYEA7XAjshtm4IkrYyTizDvfTqrUPE4fssLDibOImEEVnryq93WRYvSd\ntUUnQSmFQaoqIA2LaUKZXhgrSEcmwBUmZ7MEZty4l5+LZbh5M+/SoE7E92XB1UHq\nt6CdIIo0qsxsB2F6sxOuySXGoX8x3yAw4I5Vnx7IloVCqiFo2Rdpo8ECgYEA0h1W\nYGljkfVBYjQN3aqQyG6+mwmbH5pcCZ9U4q0GPVna5x+NfCDaphhKzLfpFARi9TVV\nD/3VYsge+vrR6i5yJHY/CWSJ6o1qtZX7z6FT1YCxBpnumbfDU+aOkuDhZe0pAW6F\nd+OpaPzfVqErLOWfIQKUiDvJ1Fzf/1PqB+xulVsCgYEArTXORILq5MgMJ7Jj5PuU\nZu4GD8wqIZ0lSlH3RqLMI9WcnxNcMSUj23YMMeQZOxLo0iMvXWVhPpxBDuQg56VG\nNAYLIwLHgoy4A0e022eLbrinxZas9Wa11KlNlsxbqXGhKS06dmLYchKluXBxsETq\ngxYybfbl+7BRNo1S0HPc88ECgYEArHjwgkuANDuB5D6ecyqjliNxyonkD9kBW9Sy\nNS+aQ5oSmk3IMfA2Csk9/TWp2YiQQn/4xxuxoVhsNdDVpslhYJS/wdIJc8OJqGzp\nOtJOop70sVqCBSRW7fP/bImz+5rlYgt6+6KhWVDZc57wdfY23T3k9r89OVjTdh9H\nqCFn1KkCgYEAtyneA3q3kOhhGWi0VXf83tDbLp6S/lcBhkbcAXZ22ZuIkOMdXh4s\nx6QRM3ndeH+8X6HBeI5Zuce9WsZseDV/U+FGqrsJ9esM1yKF3OYJt+tPL/FzYkax\nGnjcSGbkqhxRSD/l/3v6cLHxVtaCXEF/z0dEv43bujdn9wsm1FYu1cU=\n-----END PRIVATE KEY-----\n"
-	info, err3 := p.DecryptLicense(privateKey)
-	t.Log(info)
+	var privateKey = "-----BEGIN PRIVATE KEY-----\nMIIEpAIBAAKCAQEAvKCuiq0bBktYnwOe+V+krqgVeRPF0R/D2WZGj/I2Uc2MR8vO\nKdi6rDARhXyD/sF2Ek4Ny5uTDPvkKI6MkY70LUWAdXCxjN4v7Auo3gGycBiUE5qX\nLJtDH1i5P77GTdTVNpmmsvT+2icWpc0wiXGLxLzdH0N1f/uKt72/ak9bbS3vvAxz\nPcgN4dIDa7fvagZ42VFRIWz2r+ok2ScEB4r2E4c0vPzjb/CwToRBzaB7OXEtq5BB\ntWLRq0AqCMx3Zlapq0fMheXCYqf7+Q4MGxdgBDknsmAOlkvP74NhyHkSJFsrgKh8\nEUbr2mx/4n/5X3yLlbju0qh/R9lF/UA7hLvlRwIDAQABAoIBACLaGYXb+CtQjp5K\n3/u5lUcEHXuSkLFUCi7H+++q1CiHLw0w9fW7arpX41TjrcvLWRKGw3vEUgZLIFvy\nArz+SdV3iwWn/dZGU1psyRXEAIE/uVRp8ta2FU/cZ9YEXMWStpZxC2DzbYdHQ6L8\n56Pti+Kc9spI/5PXGUlb0NtGsGDakzWhemBdNQsTiCd1TH7KZ8diX5TEPB/8Q5uY\nWMgD0T/NZsbCnFncc6pDcbvGQBnKuL8FZGkmxJ/bS/NEA9zzu9QIGFMhqPMaGI8B\n/sNPMXqmXp5ck9GesFJ1lMqUfd4BdLD9vzzbfH7F8cyjPu/rzkQCTQoYg8XZ0CrO\nlBLx3XECgYEA9y580k43NRADE0B3rurcLxl/yes0j44Xis0khteR6NQph+Pr3z24\n0G4Bn1gnUff+q836dNk/sF0CAv4RHFiOm03kAhMHMv4/BTIROBjKTukxKqgXixqb\nClxK3hQK1lxUzLlT75tC/XqIhKm2sR7E8E974FPfGr6QdActbbf9DO8CgYEAw1tr\npWD5/sMfxxIKfZfcPlZiMuW32Ev9x+fGRUg6/GKCmMgKHznVUuRFaNK07iTIj+ip\nB5mfd4GzztQafSJhsdAq5Fz3ocpJ+l5+34ZJf5flGYCFvCiobBSxLwfOT6+Zj/cJ\ncy8ypV5A3TXDGMl8V/F4lulj+w3522X1ZhyeXSkCgYA/GXTv0tuxBgdi8MAcvQO8\nWkwO5aYjR2inHDtI2Nr8jryTXhGmiYEWZB6x6LUQ7bfrb8eR8KubgAK1dNo1XD37\nU2TzSpw53kGEOAXBRkLO5iSQ+RwZfI87k9fg3Uju898J6/2LWx08y/zxsMlcabho\niEHdQEvh7ee+Vt639ZH5rQKBgQCFqkKQCDdk+cr/YTeuUT6PpHlSC91rcCs3IT2G\n3/IEB78FnDFYxjBQpAFdxHWpT5+u32jv20vB8AvAI13waprfl+gREg8ZMxjE5uz2\nMaKOW7aUaVyXrlX2hX3qCPQ/j42JdGSR3CRSA5hsAsH3brzWS1DQKOaQuzJOzIdI\nk6JDaQKBgQD1G804ylRmmZ2duPoF95aCZr0re6xl5yEmyN6tKrBDDig8Fg+0u599\niC1s2Fn1yVpx4hAAULQN12kH+D2ujY1EltgZoGnmHIOsMtXkduLMTvku5crp2/PQ\ndTo9k4Po9uzXrsjcQvyaTvTaJFoU4lxr/8COHRBwap5SoCWNw7yZVg==\n-----END PRIVATE KEY-----\n"
+	err3 := p.CheckByPrivateKey(privateKey)
+	//t.Log(info)
 	t.Log(err3)
 }
