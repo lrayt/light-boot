@@ -176,7 +176,10 @@ func (p LicenseProvider) CheckByPrivateKey(privateKeyPEM string) error {
 		var isContain = false
 		for _, s := range macList {
 			for _, t := range info.MacAddress {
-				isContain = s == t
+				if s == t {
+					isContain = true
+					break
+				}
 			}
 		}
 		if !isContain {
