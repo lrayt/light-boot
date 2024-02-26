@@ -18,6 +18,7 @@ type LicenseProvider struct {
 	PrivateKeyPath string
 	PublicKeyPath  string
 	LicensePath    string
+	PublicKey      *rsa.PublicKey
 }
 
 func NewLicenseProvider(workDir string) *LicenseProvider {
@@ -125,7 +126,7 @@ func (p LicenseProvider) LoadLicenseInfo() (*LicenseInfo, error) {
 }
 
 // DecryptLicense 证书解密
-func (p LicenseProvider) DecryptLicense(privateKeyPEM string) (*LicenseInfo, error) {
+func (p *LicenseProvider) DecryptLicense(privateKeyPEM string) (*LicenseInfo, error) {
 	privateKeyBlock, _ := pem.Decode([]byte(privateKeyPEM))
 	privateKey, err2 := x509.ParsePKCS1PrivateKey(privateKeyBlock.Bytes)
 	if err2 != nil {
@@ -141,7 +142,7 @@ func (p LicenseProvider) DecryptLicense(privateKeyPEM string) (*LicenseInfo, err
 	if err4 != nil {
 		return nil, err4
 	}
-
+	p.PublicKey = &privateKey.PublicKey
 	var info = new(LicenseInfo)
 	if err := json.Unmarshal(decryptedText, info); err != nil {
 		return nil, err
@@ -189,9 +190,16 @@ func (p LicenseProvider) CheckByPrivateKey(privateKeyPEM string) error {
 
 	if !info.LicenseActivated {
 		info.LicenseActivated = true
-		if err := p.GenLicense(info); err != nil {
-			return err
+		plaintext, err2 := json.Marshal(info)
+		if err2 != nil {
+			return err2
 		}
+
+		ciphertext, err3 := rsa.EncryptPKCS1v15(rand.Reader, p.PublicKey, plaintext)
+		if err3 != nil {
+			return err3
+		}
+		return p.SaveFile(p.LicensePath, ciphertext)
 	}
 	return nil
 }
