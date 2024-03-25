@@ -39,11 +39,17 @@ func InitEnv(appName, workDir string, args ...string) error {
 		EventBus: event_bus.NewEventBus(),
 	}
 	appRuntime.Print()
+	var enableConfig = true
+	if len(args) > 1 && args[1] == "no_config" {
+		enableConfig = false
+	}
 	// 设置默认配置构造器
-	if provider, err := cfg_provider.NewYamlConfigProvider(globalEnv); err != nil {
-		return err
-	} else {
-		appRuntime.ConfigProvider = provider
+	if enableConfig {
+		if provider, err := cfg_provider.NewYamlConfigProvider(globalEnv); err != nil {
+			return err
+		} else {
+			appRuntime.ConfigProvider = provider
+		}
 	}
 	// 设置默认日志
 	if provider, err := log_provider.NewLocalFileLogProvider(globalEnv); err != nil {
