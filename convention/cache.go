@@ -1,4 +1,4 @@
-package ts_error
+package convention
 
 type CacheConf struct {
 	Host     string
