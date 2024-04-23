@@ -29,6 +29,13 @@ func ToCTX(c *gin.Context) context.Context {
 		ctx = context.WithValue(ctx, log_provider.IsAdmin, false)
 	}
 
+	// client
+	if id, exist := c.Get(log_provider.ClientId); exist {
+		ctx = context.WithValue(ctx, log_provider.ClientId, id)
+	} else {
+		ctx = context.WithValue(ctx, log_provider.ClientId, "None")
+	}
+
 	return ctx
 }
 
@@ -68,4 +75,13 @@ func IsAdmin(ctx context.Context) bool {
 	isAdmin := ctx.Value(log_provider.IsAdmin)
 	is, ok := isAdmin.(bool)
 	return ok && is
+}
+
+func ClientId(ctx context.Context) string {
+	cid := ctx.Value(log_provider.ClientId)
+	if clientId, ok := cid.(string); ok {
+		return clientId
+	} else {
+		return "None"
+	}
 }
