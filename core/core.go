@@ -59,3 +59,7 @@ func InitEnv(appName, workDir string, args ...string) error {
 	}
 	return nil
 }
+
+func SetLogProvider(logProvider log_provider.LoggerProvider) {
+	appRuntime.LoggerProvider = logProvider
+}
