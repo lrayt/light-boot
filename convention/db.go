@@ -8,4 +8,5 @@ type DBConf struct {
 	Port       uint
 	DBName     string
 	SchemaName string
+	Charset    string
 }
