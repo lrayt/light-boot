@@ -11,7 +11,7 @@ const (
 	BizId     = "biz-id"
 	UserId    = "user-id"
 	IsAdmin   = "is_admin"
-	ClientId  = "client-id"
+	ClientId  = "Client-Id"
 )
 
 func NewTraceId() string {
