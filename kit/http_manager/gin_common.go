@@ -30,12 +30,7 @@ func ToCTX(c *gin.Context) context.Context {
 	}
 
 	// client
-	if id, exist := c.Get(log_provider.ClientId); exist {
-		ctx = context.WithValue(ctx, log_provider.ClientId, id)
-	} else {
-		ctx = context.WithValue(ctx, log_provider.ClientId, "None")
-	}
-
+	ctx = context.WithValue(ctx, log_provider.ClientId, c.GetHeader(log_provider.ClientId))
 	return ctx
 }
 
