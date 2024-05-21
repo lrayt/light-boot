@@ -1,6 +1,7 @@
 package convention
 
 import (
+	"errors"
 	"github.com/lrayt/light-boot/core"
 	"github.com/lrayt/light-boot/pkg/file_utils"
 	"path/filepath"
@@ -52,4 +53,21 @@ func (c HttpConf) HasStatic(route string, rootPath ...string) bool {
 		}
 	}
 	return false
+}
+
+func (c HttpConf) GetStaticPath(route string, rootPath ...string) (string, error) {
+	var prefix = core.GWorkDir()
+	if len(rootPath) > 0 {
+		prefix = rootPath[0]
+	}
+	for _, o := range c.Static {
+		if o.Route != route {
+			continue
+		}
+		var targetPath = filepath.Join(prefix, o.FilePath)
+		if file_utils.IsFolder(targetPath) {
+			return targetPath, nil
+		}
+	}
+	return "", errors.New("未找到静态资源配置")
 }
