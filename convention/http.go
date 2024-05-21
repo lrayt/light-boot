@@ -1,6 +1,11 @@
 package convention
 
-import "strconv"
+import (
+	"github.com/lrayt/light-boot/core"
+	"github.com/lrayt/light-boot/pkg/file_utils"
+	"path/filepath"
+	"strconv"
+)
 
 type StaticMap struct {
 	Route    string
@@ -31,4 +36,20 @@ func (c HttpConf) BaseUrl() string {
 		url += ":" + strconv.Itoa(int(c.Port))
 	}
 	return url
+}
+
+func (c HttpConf) HasStatic(route string, rootPath ...string) bool {
+	if len(c.Static) <= 0 {
+		return false
+	}
+	var prefix = core.GWorkDir()
+	if len(rootPath) > 0 {
+		prefix = rootPath[0]
+	}
+	for _, o := range c.Static {
+		if o.Route == route {
+			return file_utils.IsFolder(filepath.Join(prefix, o.FilePath))
+		}
+	}
+	return false
 }
