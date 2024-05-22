@@ -2,6 +2,7 @@ package convention
 
 import (
 	"errors"
+	"github.com/gin-gonic/gin"
 	"github.com/lrayt/light-boot/core"
 	"github.com/lrayt/light-boot/pkg/file_utils"
 	"strconv"
@@ -39,11 +40,13 @@ func (c HttpConf) BaseUrl() string {
 	return url
 }
 
-// 解析Static
-func (c HttpConf) StaticParser() error {
+// RegisterStaticRoute 注册静态资源路径
+func (c HttpConf) RegisterStaticRoute(engine *gin.Engine) error {
 	for _, o := range c.Static {
 		o.FilePath = strings.Replace(o.FilePath, "${WorkDir}", core.GWorkDir(), 1)
-		if !file_utils.IsFolder(o.FilePath) {
+		if file_utils.IsFolder(o.FilePath) {
+			engine.Static(o.Route, o.FilePath)
+		} else {
 			return errors.New("静态资源路径，不存在:" + o.FilePath)
 		}
 	}
