@@ -4,8 +4,8 @@ import (
 	"errors"
 	"github.com/lrayt/light-boot/core"
 	"github.com/lrayt/light-boot/pkg/file_utils"
-	"path/filepath"
 	"strconv"
+	"strings"
 )
 
 type StaticMap struct {
@@ -39,32 +39,33 @@ func (c HttpConf) BaseUrl() string {
 	return url
 }
 
-func (c HttpConf) HasStatic(route string, rootPath ...string) bool {
-	if len(c.Static) <= 0 {
-		return false
+// 解析Static
+func (c HttpConf) StaticParser() error {
+	for _, o := range c.Static {
+		o.FilePath = strings.Replace(o.FilePath, "${WorkDir}", core.GWorkDir(), 1)
+		if !file_utils.IsFolder(o.FilePath) {
+			return errors.New("静态资源路径，不存在:" + o.FilePath)
+		}
 	}
-	var prefix = core.GWorkDir()
-	if len(rootPath) > 0 {
-		prefix = rootPath[0]
-	}
+	return nil
+}
+
+func (c HttpConf) HasStatic(route string) bool {
 	for _, o := range c.Static {
 		if o.Route == route {
-			return file_utils.IsFolder(filepath.Join(prefix, o.FilePath))
+			o.FilePath = strings.Replace(o.FilePath, "${WorkDir}", core.GWorkDir(), 1)
+			return file_utils.IsFolder(o.FilePath)
 		}
 	}
 	return false
 }
 
-func (c HttpConf) GetStaticPath(route string, rootPath ...string) (string, error) {
-	var prefix = core.GWorkDir()
-	if len(rootPath) > 0 {
-		prefix = rootPath[0]
-	}
+func (c HttpConf) GetStaticPath(route string) (string, error) {
 	for _, o := range c.Static {
 		if o.Route != route {
 			continue
 		}
-		var targetPath = filepath.Join(prefix, o.FilePath)
+		var targetPath = strings.Replace(o.FilePath, "${WorkDir}", core.GWorkDir(), 1)
 		if file_utils.IsFolder(targetPath) {
 			return targetPath, nil
 		}
