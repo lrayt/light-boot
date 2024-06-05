@@ -14,6 +14,8 @@ const (
 	SystemErr        = 40001
 
 	BusinessErr = 50001
+
+	SuccessMsg = "Success"
 )
 
 type BaseResponse struct {
