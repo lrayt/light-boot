@@ -7,6 +7,7 @@ import (
 	"github.com/lrayt/light-boot/convention"
 	"github.com/lrayt/light-boot/core"
 	"github.com/lrayt/light-boot/core/log_provider"
+	"github.com/lrayt/light-boot/pkg/uuid"
 )
 
 func ToCTX(c *gin.Context) context.Context {
@@ -46,7 +47,9 @@ func CORSMiddleware() gin.HandlerFunc {
 			c.AbortWithStatus(200)
 			return
 		}
-
+		var traceId = uuid.GenUUID()
+		c.Set(log_provider.TraceId, traceId)
+		c.Writer.Header().Set(log_provider.RequestId, traceId)
 		c.Next()
 	}
 }

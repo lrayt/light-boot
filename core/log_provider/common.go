@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	RequestId = "request-id"
+	RequestId = "Request-Id"
 	TraceId   = "trace-id"
 	BizId     = "biz-id"
 	UserId    = "user-id"
