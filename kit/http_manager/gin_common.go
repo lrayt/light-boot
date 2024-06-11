@@ -45,6 +45,33 @@ func GetHttpConf() (*convention.HttpConf, error) {
 	return httpConf, err
 }
 
+func CurrUserId(ctx context.Context) string {
+	uid := ctx.Value(log_provider.UserId)
+	if str, ok := uid.(string); ok && len(str) > 0 {
+		return str
+	} else {
+		return ""
+	}
+}
+
+func CurrUsername(ctx context.Context) string {
+	username := ctx.Value(log_provider.UserName)
+	if str, ok := username.(string); ok && len(str) > 0 {
+		return str
+	} else {
+		return ""
+	}
+}
+
+func CurrClientId(ctx context.Context) string {
+	clientId := ctx.Value(log_provider.ClientId)
+	if str, ok := clientId.(string); ok && len(str) > 0 {
+		return str
+	} else {
+		return ""
+	}
+}
+
 func GetUserId(ctx context.Context) (string, error) {
 	uid := ctx.Value(log_provider.UserId)
 	if str, ok := uid.(string); ok && len(str) > 0 {
