@@ -11,26 +11,11 @@ import (
 )
 
 func ToCTX(c *gin.Context) context.Context {
-	var traceId = log_provider.NewTraceId()
-	if id, exist := c.Get(log_provider.TraceId); exist {
-		if tid, ok := id.(string); ok && len(tid) > 0 {
-			traceId = tid
-		}
-	}
-	// uid
-	var ctx = context.WithValue(context.Background(), log_provider.TraceId, traceId)
-	if uid, exist := c.Get(log_provider.UserId); exist {
-		ctx = context.WithValue(ctx, log_provider.UserId, uid)
-	}
-
-	// isAdmin
-	if isAdmin, exist := c.Get(log_provider.IsAdmin); exist {
-		ctx = context.WithValue(ctx, log_provider.IsAdmin, isAdmin)
-	} else {
-		ctx = context.WithValue(ctx, log_provider.IsAdmin, false)
-	}
-
-	// client
+	var ctx = context.Background()
+	ctx = context.WithValue(ctx, log_provider.TraceId, c.GetString(log_provider.TraceId))
+	ctx = context.WithValue(ctx, log_provider.UserId, c.GetString(log_provider.UserId))
+	ctx = context.WithValue(ctx, log_provider.UserName, c.GetString(log_provider.UserName))
+	ctx = context.WithValue(ctx, log_provider.IsAdmin, c.GetBool(log_provider.IsAdmin))
 	ctx = context.WithValue(ctx, log_provider.ClientId, c.GetHeader(log_provider.ClientId))
 	return ctx
 }
