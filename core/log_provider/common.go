@@ -10,6 +10,7 @@ const (
 	TraceId   = "trace-id"
 	BizId     = "biz-id"
 	UserId    = "user-id"
+	UserName  = "username"
 	IsAdmin   = "is_admin"
 	ClientId  = "Client-Id"
 )
